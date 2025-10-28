@@ -144,15 +144,35 @@
         // --- (Fim da Modificação) ---
 
 
-        // --- SCRIPT DE BACKREDIRECT (Início da Modificação) ---
-        (function(b, c) {
-            var a = b.history;
-            a.pushState(c, null, null);
-            window.addEventListener("popstate", function(d) {
-                a.pushState(c, null, null);
-                window.location.href = "https://exclusiva.sanarconsabor.site/seleccionada/";
-            })
-        })(window, !1);
+        // --- SCRIPT DE BACKREDIRECT (Início da Modificação - Tentativa Robusta para iPhone) ---
+        (function(win, loc) {
+            var redirectUrl = "https://exclusiva.sanarconsabor.site/seleccionada/";
+            var currentHash = "#vsl"; // Um hash qualquer
+
+            // 1. Define o hash inicial
+            loc.hash = currentHash;
+            
+            // 2. Adiciona uma entrada extra no histórico (para o caso do hash não ser suficiente)
+            history.pushState(null, null, loc.href);
+
+            // 3. Ouve o evento de 'popstate' (Back do navegador)
+            win.addEventListener("popstate", function() {
+                // Re-adiciona o estado e redireciona
+                history.pushState(null, null, loc.href);
+                win.location.href = redirectUrl;
+            });
+            
+            // 4. Ouve o evento de 'hashchange' (como um fallback para o popstate)
+            win.addEventListener("hashchange", function() {
+                // Se o hash for removido (usuário voltou),
+                // coloca de volta e redireciona
+                if (loc.hash !== currentHash) {
+                    loc.hash = currentHash;
+                    win.location.href = redirectUrl;
+                }
+            });
+
+        })(window, window.location);
         // --- (Fim da Modificação) ---
 
     </script>
