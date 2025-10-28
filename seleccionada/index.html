@@ -185,7 +185,8 @@
                 
                 // Se o modal não estiver visível, mostre-o
                 if (modal.style.display === 'none' || !modal.style.display) {
-                    modal.style.display = 'block';
+                    // CORREÇÃO: Mudar de 'block' para 'flex' para respeitar o layout do Tailwind
+                    modal.style.display = 'flex'; 
                     // Re-adiciona o estado para "prender" o usuário no modal
                     history.pushState({ modal: true }, null);
                 }
@@ -247,5 +248,6 @@
 
 </body>
 </html>
+
 
 
