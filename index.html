@@ -46,16 +46,17 @@
             margin: 5px 0;
         }
 
-        /* Efeito de pulsação */
-        @keyframes pulse {
-            from {
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 1;
-            }
-            to {
-                transform: translate(-50%, -50%) scale(1.1);
-                opacity: 0.8;
-            }
+        /* Estilos do Botão Vermelho/Verde */
+        .button.red {
+            background-color: #c00; /* Cor vermelha principal */
+            color: #FFF;
+            border-color: #c00;
+        }
+        .button.red:hover,
+        .button.red:active {
+            background-color: #269800; /* Cor verde no hover/active (do .css original) */
+            color: #FFF;
+            border-color: #269800;
         }
     </style>
 </head>
