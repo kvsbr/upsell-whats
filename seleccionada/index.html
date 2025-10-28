@@ -207,10 +207,19 @@
 
             // 1. ACIONA O SETUP NA PRIMEIRA INTERAÇÃO DO USUÁRIO
             // Isso é crucial para o Safari/iOS. Esperamos o usuário tocar ou rolar.
-            window.addEventListener('touchstart', setupExitIntent, { once: true, passive: true });
-            window.addEventListener('scroll', setupExitIntent, { once: true, passive: true });
+            // Mudanças: Removido 'passive: true' e adicionado 'setTimeout' para tentar
+            // contornar as restrições mais rígidas do Safari.
+            function setupAfterInteraction() {
+                // O setTimeout de 0ms "agenda" a execução da função para
+                // logo após o navegador terminar de processar o evento atual (toque/rolagem).
+                // Isso aumenta a chance do Safari "confiar" no history.pushState.
+                setTimeout(setupExitIntent, 0);
+            }
+
+            window.addEventListener('touchstart', setupAfterInteraction, { once: true });
+            window.addEventListener('scroll', setupAfterInteraction, { once: true });
             // Fallback para desktop (clique)
-            window.addEventListener('click', setupExitIntent, { once: true, passive: true });
+            window.addEventListener('click', setupAfterInteraction, { once: true });
 
         </script>
 
@@ -269,3 +278,8 @@
 
 </body>
 </html>
+
+
+
+
+
