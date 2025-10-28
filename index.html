@@ -106,7 +106,29 @@
     
     <script>
         var video = document.getElementById('video');
-// ... existing code ... -->
+        var overlay = document.getElementById('overlay');
+        var videoSrc = "https://cdn.jsdelivr.net/gh/brengrassy/adios3@f37b1edd755ed644c4388ab468828cd3fd953b32/Adios-Gluten.m3u8";
+        
+        if (Hls.isSupported()) {
+            var hls = new Hls();
+            hls.loadSource(videoSrc);
+            hls.attachMedia(video);
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = videoSrc;
+        }
+        
+        function restartVideo() {
+            video.currentTime = 0; // Reinicia o vídeo do começo
+            video.muted = false;
+            video.play();
+            overlay.style.display = "none";
+        }
+        
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        
+        document.getElementById("num-persons").innerText = getRandomInt(2127, 4579);
         setInterval(function() {
             var current = parseInt(document.getElementById("num-persons").innerText);
             document.getElementById("num-persons").innerText = current + 1;
@@ -118,22 +140,9 @@
             if (buttonContainer) {
                 buttonContainer.style.display = 'block';
             }
-        }, 240000); // 4 minutos (4 * 60 * 1000 ms)
-        // --- (Fim da Modificação) ---
-
-
-        // --- SCRIPT DE BACKREDIRECT (Início da Modificação) ---
-        (function(b, c) {
-            var a = b.history;
-            a.pushState(c, null, null);
-            window.addEventListener("popstate", function(d) {
-                a.pushState(c, null, null);
-                window.location.href = "https://exclusiva.sanarconsabor.site/seleccionada/";
-            })
-        })(window, !1);
+        }, 1000); // 10 minutos (10 * 60 * 1000 ms)
         // --- (Fim da Modificação) ---
 
     </script>
 </body>
 </html>
-
