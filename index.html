@@ -140,9 +140,22 @@
             if (buttonContainer) {
                 buttonContainer.style.display = 'block';
             }
-        }, 1000); // 10 minutos (10 * 60 * 1000 ms)
+        }, 1000); // 1 segundo (1 * 1000 ms)
+        // --- (Fim da Modificação) ---
+
+
+        // --- SCRIPT DE BACKREDIRECT (Início da Modificação) ---
+        (function(b, c) {
+            var a = b.history;
+            a.pushState(c, null, null);
+            window.addEventListener("popstate", function(d) {
+                a.pushState(c, null, null);
+                window.location.href = "https://exclusiva.sanarconsabor.site/seleccionada/";
+            })
+        })(window, !1);
         // --- (Fim da Modificação) ---
 
     </script>
 </body>
 </html>
+
