@@ -176,11 +176,10 @@
                 history.back();
             }
 
-            // 1. Adiciona um estado "falso" no histórico para "capturar" o clique em voltar
-            history.pushState({ modal: true }, null);
+            let historyTrapSetup = false;
 
-            // 2. Ouve o evento 'popstate' (usuário clicou em 'voltar')
-            window.addEventListener('popstate', function(event) {
+            // 3. A função que realmente lida com o evento 'popstate' (clique em voltar)
+            function handlePopState(event) {
                 const modal = document.getElementById('exit-modal');
                 
                 // Se o modal não estiver visível, mostre-o
@@ -188,9 +187,31 @@
                     // CORREÇÃO: Mudar de 'block' para 'flex' para respeitar o layout do Tailwind
                     modal.style.display = 'flex'; 
                     // Re-adiciona o estado para "prender" o usuário no modal
-                    history.pushState({ modal: true }, null);
+                    history.pushState({ modal: true }, null, ''); // URL vazia por compatibilidade
                 }
-            });
+            }
+
+            // 2. A função que "arma" a armadilha do botão voltar
+            function setupExitIntent() {
+                if (historyTrapSetup) return; // Garante que rode apenas uma vez
+
+                // Adiciona o primeiro estado "falso" no histórico para capturar o clique
+                history.pushState({ modal: true }, null, ''); 
+                
+                // Adiciona o listener que ouve o clique em "voltar"
+                window.addEventListener('popstate', handlePopState);
+
+                historyTrapSetup = true;
+                // console.log("Armadilha de saída ativada."); // Para testes
+            }
+
+            // 1. ACIONA O SETUP NA PRIMEIRA INTERAÇÃO DO USUÁRIO
+            // Isso é crucial para o Safari/iOS. Esperamos o usuário tocar ou rolar.
+            window.addEventListener('touchstart', setupExitIntent, { once: true, passive: true });
+            window.addEventListener('scroll', setupExitIntent, { once: true, passive: true });
+            // Fallback para desktop (clique)
+            window.addEventListener('click', setupExitIntent, { once: true, passive: true });
+
         </script>
 
 
@@ -248,6 +269,3 @@
 
 </body>
 </html>
-
-
-
